@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            overflow: hidden;
+        }
+
+        .card {
+            width: 300px;
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .card .photo {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card .info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card .info h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .card .info p {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="user-card">
+        <div class="photo" id="user-photo"></div>
+        <div class="info">
+            <h2 id="user-name">Loading...</h2>
+            <p id="user-username">@loading</p>
+            <p id="user-id">ID: loading</p>
+            <p id="user-bio">Loading bio...</p>
+        </div>
+    </div>
+
+    <script>
+        // Extract POST data
+        const params = new URLSearchParams(window.location.search);
+        const userData = {
+            photo: params.get("photo") || "https://via.placeholder.com/300x200",
+            name: params.get("first_name") + " " + (params.get("last_name") || ""),
+            username: params.get("username") || "@unknown",
+            id: params.get("id") || "Unknown ID",
+            bio: params.get("bio") || "No bio available."
+        };
+
+        // Populate the card with user data
+        const photoElement = document.getElementById('user-photo');
+        const nameElement = document.getElementById('user-name');
+        const usernameElement = document.getElementById('user-username');
+        const idElement = document.getElementById('user-id');
+        const bioElement = document.getElementById('user-bio');
+
+        photoElement.style.backgroundImage = `url(${userData.photo})`;
+        nameElement.textContent = userData.name.trim();
+        usernameElement.textContent = userData.username;
+        idElement.textContent = `ID: ${userData.id}`;
+        bioElement.textContent = userData.bio;
+    </script>
+</body>
+</html>
