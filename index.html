@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Info Card</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -47,18 +47,14 @@
             margin: 10px 0;
             font-size: 1.4rem;
             color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            word-break: break-word; /* Перенос слов */
         }
 
         .card .info p {
             color: #555;
             margin: 5px 0;
             font-size: 1rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            word-break: break-word;
         }
 
         .card .info p span {
@@ -90,30 +86,31 @@
     </div>
 
     <script>
-        // Extract POST data
-        const params = new URLSearchParams(window.location.search);
+        // Функция декодирования HTML-символов
         const decodeHTML = (str) => {
             const txt = document.createElement("textarea");
             txt.innerHTML = str;
             return txt.value;
         };
 
+        // Извлечение данных из URL
+        const params = new URLSearchParams(window.location.search);
         const userData = {
             photo: decodeURIComponent(params.get("photo")) || "https://via.placeholder.com/320x220",
             name: decodeHTML(params.get("first_name") || "") + " " + decodeHTML(params.get("last_name") || "").trim(),
-            username: decodeHTML(params.get("username")) || "@unknown",
-            id: decodeHTML(params.get("id")) || "Unknown ID",
-            bio: decodeHTML(params.get("bio")) || "No bio available."
+            username: decodeHTML(params.get("username") || "@unknown"),
+            id: decodeHTML(params.get("id") || "Unknown ID"),
+            bio: decodeHTML(params.get("bio") || "No bio available.")
         };
 
-        // Populate the card with user data
+        // Заполнение карточки данными
         const photoElement = document.getElementById('user-photo');
         const nameElement = document.getElementById('user-name');
         const usernameElement = document.getElementById('user-username');
         const idElement = document.getElementById('user-id');
         const bioElement = document.getElementById('user-bio');
 
-        photoElement.style.backgroundImage = `url(${userData.photo})`;
+        photoElement.style.backgroundImage = `url('${userData.photo}')`;
         nameElement.textContent = userData.name.trim() || "Anonymous User";
         usernameElement.textContent = userData.username;
         idElement.innerHTML = `ID: <span>${userData.id}</span>`;
