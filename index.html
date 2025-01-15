@@ -45,14 +45,20 @@
 
         .card .info h2 {
             margin: 10px 0;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card .info p {
             color: #555;
             margin: 5px 0;
             font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card .info p span {
@@ -86,12 +92,18 @@
     <script>
         // Extract POST data
         const params = new URLSearchParams(window.location.search);
+        const decodeHTML = (str) => {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = str;
+            return txt.value;
+        };
+
         const userData = {
-            photo: params.get("photo") || "https://via.placeholder.com/320x220",
-            name: (params.get("first_name") || "") + " " + (params.get("last_name") || "").trim(),
-            username: params.get("username") || "@unknown",
-            id: params.get("id") || "Unknown ID",
-            bio: params.get("bio") || "No bio available."
+            photo: decodeURIComponent(params.get("photo")) || "https://via.placeholder.com/320x220",
+            name: decodeHTML(params.get("first_name") || "") + " " + decodeHTML(params.get("last_name") || "").trim(),
+            username: decodeHTML(params.get("username")) || "@unknown",
+            id: decodeHTML(params.get("id")) || "Unknown ID",
+            bio: decodeHTML(params.get("bio")) || "No bio available."
         };
 
         // Populate the card with user data
