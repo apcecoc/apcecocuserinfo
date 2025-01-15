@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Info Card</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: 'Noto Sans', sans-serif;
+            font-family: 'Noto Sans', 'Noto Color Emoji', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,16 +45,16 @@
 
         .card .info h2 {
             margin: 10px 0;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             color: #333;
-            word-break: break-word; /* Перенос слов */
         }
 
         .card .info p {
             color: #555;
-            margin: 5px 0;
+            margin: 10px 0;
             font-size: 1rem;
-            word-break: break-word;
+            word-wrap: break-word; /* Позволяет перенос длинных слов */
+            white-space: pre-wrap; /* Сохраняет переносы строк */
         }
 
         .card .info p span {
