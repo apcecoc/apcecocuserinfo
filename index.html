@@ -44,6 +44,8 @@
         }
 
         .card .info h2 {
+            white-space: normal;
+            word-wrap: break-word;
             margin: 10px 0;
             font-size: 1.6rem;
             color: #333;
@@ -97,7 +99,7 @@
         const params = new URLSearchParams(window.location.search);
         const userData = {
             photo: decodeURIComponent(params.get("photo") || "https://via.placeholder.com/320x220"),
-            name: decodeHTML(params.get("first_name") || "") + " " + decodeHTML(params.get("last_name") || "").trim(),
+            name: decodeURIComponent(params.get('first_name') || '') + " " + decodeURIComponent(params.get('last_name') || '').trim(),
             username: decodeHTML(params.get("username") || "@unknown"),
             id: decodeHTML(params.get("id") || "Unknown ID"),
             bio: decodeHTML(params.get("bio") || "No bio available.")
@@ -110,7 +112,7 @@
         const idElement = document.getElementById('user-id');
         const bioElement = document.getElementById('user-bio');
 
-        photoElement.style.backgroundImage = `url('${encodeURI(userData.photo)}')`;
+        photoElement.style.backgroundImage = `url(${decodeURIComponent(userData.photo)})`;
         nameElement.textContent = userData.name.trim() || "Anonymous User";
         usernameElement.textContent = userData.username;
         idElement.innerHTML = `ID: <span>${userData.id}</span>`;
