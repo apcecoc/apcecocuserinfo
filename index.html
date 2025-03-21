@@ -121,7 +121,11 @@
         // Проверка загрузки изображения
         const img = new Image();
         img.onerror = () => {
+            console.error("Failed to load image:", userData.photo);
             photoElement.style.backgroundImage = `url(https://via.placeholder.com/320x220)`;
+        };
+        img.onload = () => {
+            console.log("Image loaded successfully:", userData.photo);
         };
         img.src = userData.photo;
     </script>
