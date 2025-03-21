@@ -55,8 +55,8 @@
             color: #555;
             margin: 10px 0;
             font-size: 1rem;
-            word-wrap: break-word; /* Перенос длинных слов */
-            white-space: pre-wrap; /* Сохраняет переносы строк */
+            word-wrap: break-word;
+            white-space: pre-wrap;
         }
 
         .card .info p span {
@@ -98,7 +98,7 @@
         // Извлечение данных из URL
         const params = new URLSearchParams(window.location.search);
         const userData = {
-            photo: decodeURIComponent(params.get("photo") || "https://via.placeholder.com/320x220"),
+            photo: params.get("photo") || "https://via.placeholder.com/320x220",
             name: decodeURIComponent(params.get('first_name') || '') + " " + decodeURIComponent(params.get('last_name') || '').trim(),
             username: decodeHTML(params.get("username") || "@unknown"),
             id: decodeHTML(params.get("id") || "Unknown ID"),
@@ -112,11 +112,18 @@
         const idElement = document.getElementById('user-id');
         const bioElement = document.getElementById('user-bio');
 
-        photoElement.style.backgroundImage = `url(${decodeURIComponent(userData.photo)})`;
+        photoElement.style.backgroundImage = `url(${userData.photo})`;
         nameElement.textContent = userData.name.trim() || "Anonymous User";
         usernameElement.textContent = userData.username;
         idElement.innerHTML = `ID: <span>${userData.id}</span>`;
         bioElement.textContent = userData.bio;
+
+        // Проверка загрузки изображения
+        const img = new Image();
+        img.onerror = () => {
+            photoElement.style.backgroundImage = `url(https://via.placeholder.com/320x220)`;
+        };
+        img.src = userData.photo;
     </script>
 </body>
 </html>
