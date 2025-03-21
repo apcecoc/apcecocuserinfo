@@ -95,39 +95,60 @@
             return txt.value;
         };
 
-        // Извлечение данных из URL
+        // Извлечение paste URL из параметров
         const params = new URLSearchParams(window.location.search);
-        const userData = {
-            photo: params.get("photo") || "https://via.placeholder.com/320x220",
-            name: decodeURIComponent(params.get('first_name') || '') + " " + decodeURIComponent(params.get('last_name') || '').trim(),
-            username: decodeHTML(params.get("username") || "@unknown"),
-            id: decodeHTML(params.get("id") || "Unknown ID"),
-            bio: decodeHTML(params.get("bio") || "No bio available.")
-        };
+        const pasteUrl = params.get("paste");
 
-        // Заполнение карточки данными
-        const photoElement = document.getElementById('user-photo');
-        const nameElement = document.getElementById('user-name');
-        const usernameElement = document.getElementById('user-username');
-        const idElement = document.getElementById('user-id');
-        const bioElement = document.getElementById('user-bio');
+        if (!pasteUrl) {
+            console.error("No paste URL provided!");
+            document.getElementById('user-name').textContent = "Error";
+            document.getElementById('user-username').textContent = "No data";
+            document.getElementById('user-id').innerHTML = "ID: <span>N/A</span>";
+            document.getElementById('user-bio').textContent = "Failed to load user data.";
+            document.getElementById('user-photo').style.backgroundImage = `url(https://via.placeholder.com/320x220)`;
+            return;
+        }
 
-        photoElement.style.backgroundImage = `url(${userData.photo})`;
-        nameElement.textContent = userData.name.trim() || "Anonymous User";
-        usernameElement.textContent = userData.username;
-        idElement.innerHTML = `ID: <span>${userData.id}</span>`;
-        bioElement.textContent = userData.bio;
+        // Загружаем данные из pastebin
+        fetch(pasteUrl + "/raw")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch paste data");
+                }
+                return response.json();
+            })
+            .then(userData => {
+                const photoElement = document.getElementById('user-photo');
+                const nameElement = document.getElementById('user-name');
+                const usernameElement = document.getElementById('user-username');
+                const idElement = document.getElementById('user-id');
+                const bioElement = document.getElementById('user-bio');
 
-        // Проверка загрузки изображения
-        const img = new Image();
-        img.onerror = () => {
-            console.error("Failed to load image:", userData.photo);
-            photoElement.style.backgroundImage = `url(https://via.placeholder.com/320x220)`;
-        };
-        img.onload = () => {
-            console.log("Image loaded successfully:", userData.photo);
-        };
-        img.src = userData.photo;
+                photoElement.style.backgroundImage = `url(${userData.photo})`;
+                nameElement.textContent = (userData.first_name + " " + userData.last_name).trim() || "Anonymous User";
+                usernameElement.textContent = userData.username ? `@${userData.username}` : "@unknown";
+                idElement.innerHTML = `ID: <span>${userData.id}</span>`;
+                bioElement.textContent = userData.bio;
+
+                // Проверка загрузки изображения
+                const img = new Image();
+                img.onerror = () => {
+                    console.error("Failed to load image:", userData.photo);
+                    photoElement.style.backgroundImage = `url(https://via.placeholder.com/320x220)`;
+                };
+                img.onload = () => {
+                    console.log("Image loaded successfully:", userData.photo);
+                };
+                img.src = userData.photo;
+            })
+            .catch(error => {
+                console.error("Error loading user data:", error);
+                document.getElementById('user-name').textContent = "Error";
+                document.getElementById('user-username').textContent = "No data";
+                document.getElementById('user-id').innerHTML = "ID: <span>N/A</span>";
+                document.getElementById('user-bio').textContent = "Failed to load user data.";
+                document.getElementById('user-photo').style.backgroundImage = `url(https://via.placeholder.com/320x220)`;
+            });
     </script>
 </body>
 </html>
